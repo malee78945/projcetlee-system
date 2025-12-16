@@ -1,0 +1,22 @@
+{
+	"folders": [
+		{
+			"path": "../assets"
+		},
+		{
+			"path": "../components"
+		},
+		{
+			"path": "../layouts"
+		},
+		{
+			"path": "."
+		},
+		{
+			"path": "../static"
+		},
+		{
+			"path": "../store"
+		}
+	]
+}
