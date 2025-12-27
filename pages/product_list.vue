@@ -28,15 +28,25 @@
 
 <script>
 import { mapActions } from 'vuex'
+
 export default {
   name: 'ProductListPage',
   data() {
     return {
+      // 1. หัวข้อตารางสินค้า (Headers เดิมของคุณ)
       headers: [
         { text: 'รหัสบริการ', value: 'serviceID' },
         { text: 'ชื่อบริการ', value: 'name' },
         { text: 'ราคา (บาท)', value: 'price' },
         { text: 'Actions', value: 'actions', sortable: false },
+      ],
+      // 2. หัวข้อตารางตะกร้าสินค้า (เพิ่มใหม่เพื่อทำ CRUD ตะกร้า)
+      cartHeaders: [
+        { text: 'ชื่อบริการ', value: 'name' },
+        { text: 'ราคา', value: 'price' },
+        { text: 'จำนวน', value: 'quantity', align: 'center' },
+        { text: 'รวม', value: 'total' },
+        { text: 'ลบ', value: 'delete_action', sortable: false },
       ],
       services: [
         { serviceID: 'S001', name: 'อาบน้ำ (สุนัขเล็ก)', price: 300 },
@@ -46,10 +56,56 @@ export default {
       ],
     }
   },
+
+
+  computed: {
+    cartItems() {
+      return this.$store.state.cart.items || []
+    },
+    grandTotal() {
+      return this.cartItems.reduce((total, item) => total + (item.price * item.quantity), 0)
+    }
+  },
+
   methods: {
+    
     ...mapActions('cart', [
-      'addtocart'
-    ]), 
+      'addtocart',
+      'updateQty',
+      'remove'
+    ]),
+
+    
+    changeQty(item, n) {
+      const newQty = item.quantity + n
+      if (newQty > 0) {
+        this.$store.dispatch('cart/updateQty', { serviceID: item.serviceID, quantity: newQty })
+      }
+    },
+
+    
+    async confirmOrder() {
+      if (this.cartItems.length === 0) return alert('กรุณาเลือกบริการก่อนครับ');
+      if (!confirm('ยืนยันการสั่งจองใช่หรือไม่?')) return;
+
+      const payload = {
+        total_price: this.grandTotal,
+        items: this.cartItems
+      };
+
+      try {
+       
+        let result = await this.$axios.post('http://localhost/myfirst_nuxt_app_api-main/cart_save.php', payload);
+        
+        if (result.data.status) {
+          alert('บันทึกข้อมูลการจองลงฐานข้อมูลสำเร็จ!');
+          this.$store.commit('cart/CLEAR_CART'); // ล้างตะกร้าเมื่อบันทึกเสร็จ
+        }
+      } catch (error) {
+        console.error(error);
+        alert('เกิดข้อผิดพลาดในการเชื่อมต่อฐานข้อมูล');
+      }
+    }
   },
 }
 </script>
@@ -73,7 +129,7 @@ export default {
     color: #40798C !important;
 }
 
-/* 4. ปรับแต่งหัวตาราง (Headers) */
+
 .service-table ::v-deep th {
   background-color: #A8E6CF !important; 
   font-weight: 600 !important; 
@@ -82,7 +138,7 @@ export default {
   border-bottom: none !important; 
 }
 
-/* สลับสีพื้นหลังแถวให้ดูน่ารัก */
+
 .service-table ::v-deep tr:nth-child(even) {
     background-color: #f7fcfb !important;
 }
@@ -90,7 +146,6 @@ export default {
     background-color: #ffffff !important; 
 }
 
-/* ตั้งค่าสีตัวอักษรทั่วไปในตาราง */
 .service-table ::v-deep td {
   color: #333 !important; 
   padding: 12px 16px !important;
@@ -111,11 +166,11 @@ export default {
 }
 
 
-/* ปรับน้ำหนักและขนาดหัวตารางให้ดูดีขึ้น */
+
 .service-table ::v-deep th {
 
-  font-weight: 600 !important; /* ตัวหนาปานกลาง */
-  font-size: 1.05em; /* เพิ่มขนาดหัวตารางเล็กน้อย */
+  font-weight: 600 !important; 
+  font-size: 1.05em; 
 }
 
 /* ทำให้ชื่อบริการในตารางดูเด่นขึ้น */

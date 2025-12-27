@@ -69,7 +69,7 @@ export default {
 
 /* 3. สีตัวอักษรหลักใน Card: ใช้สีดำเข้ม */
 .service-card h1, .service-card, .service-table ::v-deep tr, .service-table ::v-deep td {
-  color: #333333 !important; 
+  color: #897979ff !important; 
 }
 
 /* 4. ปรับแต่งหัวตาราง (Headers): ใช้สีฟ้าอ่อนและตัวอักษรสีน้ำเงินเข้ม */

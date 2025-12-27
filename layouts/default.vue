@@ -79,13 +79,15 @@ export default {
       clipped: false,
       drawer: false,
       fixed: false,
-      items: [
-        { icon: 'mdi-apps', title: 'Welcome', to: '/' },
-        { icon: 'mdi-chart-bubble', title: 'Inspire', to: '/inspire' },
-        { icon: 'mdi-chart-bubble', title: 'Product', to: '/product_list' },
-      ],
+  items: [
+    { icon: 'mdi-home', title: 'หน้าแรก', to: '/product_list' }, 
+    { icon: 'mdi-cart', title: 'ตะกร้า', to: '/' },
+    { icon: 'mdi-chart-bubble', title: 'Inspire', to: '/inspire' },
+    
+],
+
       miniVariant: false,
-      title: 'Pet Service Booking', // เปลี่ยนชื่อ Title ให้ตรงกับหัวข้อ
+      title: 'การจองบริการสัตว์เลี้ยง',
     }
   },
   computed: {

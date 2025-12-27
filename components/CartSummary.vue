@@ -1,40 +1,3 @@
-<script>
-import { mapGetters, mapActions} from 'vuex'
-export default{
-  computed:{
-    ...mapGetters('cart',{
-      bookingitems: 'getbookingitems', 
-      totalPrice: 'getTotalPrice'
-    }), 
-  },
-
-  methods: { 
-    ...mapActions('cart',['setBookingDate','removeFromCart']),
-    
-    promptForDateTime(index){
-      
-      const date = prompt ('กรองวันที่จอง (YYYY-MM-DD):');
-      const time = prompt ('กรองเวลาจอง (HH-MM):');
-
-      if (date && time ) {
-        this.setBookingDate({ 
-          index: index,
-          date: date,
-          time: time
-        });
-      }
-    },
-    
-    removeItem(product) {
-      this.removeFromCart(product); 
-    },
-    
-    proceedToCheckout() {
-      alert('Proceeding to Checkout!');
-    },
-  } 
-} 
-</script>
 <template>
   <v-card class="cart-summary-card pa-5" elevation="4">
     <h2 class="text-h5 mb-4">รายการจองบริการ (Cart)</h2>
@@ -49,7 +12,6 @@ export default{
           <v-list-item-title class="font-weight-medium">
             {{ item.name }} ({{ item.price }} บาท)
           </v-list-item-title>
-          
           <v-list-item-subtitle>
              วันที่: {{ item.bookingDate || 'ยังไม่ได้ระบุ' }} | 
              เวลา: {{ item.bookingTime || 'ยังไม่ได้ระบุ' }}
@@ -88,3 +50,50 @@ export default{
     </div>
   </v-card>
 </template>
+
+<script>
+import { mapGetters, mapActions } from 'vuex'
+
+export default {
+  computed: {
+    ...mapGetters('cart', {
+      bookingitems: 'getbookingitems',
+      totalPrice: 'getTotalPrice'
+    }),
+  },
+  methods: {
+    ...mapActions('cart', ['setBookingDate', 'removeFromCart']),
+
+    async proceedToCheckout() {
+      if (this.bookingitems.length === 0) return;
+      if (!confirm('ยืนยันการบันทึกการจองหรือไม่?')) return;
+      const payload = {
+        total_price: this.totalPrice,
+        items: this.bookingitems 
+      };
+      try {
+        let result = await this.$axios.post('http://localhost/myfirst_nuxt_app_api-main/cart_save.php', payload);
+        if (result.data.status) {
+          alert('บันทึกการจองสำเร็จ!');
+          this.$store.commit('cart/CLEAR_CART'); 
+        } else {
+          alert('เกิดข้อผิดพลาดจาก Server: ' + result.data.message);
+        }
+      } catch (error) {
+        console.error(error);
+        alert('ไม่สามารถติดต่อ Server ได้');
+      }
+    },
+    promptForDateTime(index) {
+      const date = prompt('กรอกวันที่จอง (YYYY-MM-DD):');
+      const time = prompt('กรอกเวลาจอง (HH:mm):');
+      if (date && time) {
+        this.setBookingDate({ index, date, time });
+      }
+    },
+    removeItem(index) {
+      this.removeFromCart(index);
+    }
+  }
+}
+</script>

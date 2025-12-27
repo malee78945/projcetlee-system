@@ -1,0 +1,28 @@
+{
+	"folders": [
+		{
+			"path": "../.nuxt"
+		},
+		{
+			"path": "../assets"
+		},
+		{
+			"path": "../components"
+		},
+		{
+			"path": "."
+		},
+		{
+			"path": "../node_modules"
+		},
+		{
+			"path": "../pages"
+		},
+		{
+			"path": "../static"
+		},
+		{
+			"path": "../store"
+		}
+	]
+}
