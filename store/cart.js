@@ -26,12 +26,12 @@ export const mutations = {
     }
   },
   // สำหรับตั้งวันที่และเวลา (ตามที่ไฟล์ CartSummary เรียกใช้)
-  SET_BOOKING_DATE(state, { index, date, time }) {
-    if (state.items[index]) {
-      state.items[index].bookingDate = date
-      state.items[index].bookingTime = time
-    }
-  },
+SET_BOOKING_DATE(state, { index, bookingDate, bookingTime }) {
+  if (state.items[index]) {
+    state.items[index].bookingDate = bookingDate
+    state.items[index].bookingTime = bookingTime
+  }
+},
   // สำหรับลบรายการ (ตามที่ไฟล์ CartSummary เรียกใช้)
   REMOVE_FROM_CART(state, index) {
     state.items.splice(index, 1)
