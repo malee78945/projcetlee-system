@@ -1,27 +1,21 @@
 <template>
   <!-- ================= TOP AUTH BAR ================= -->
-
+ 
 
   <div>
-<div class="top-auth-bar">
+     <div class="d-flex justify-end pa-4">
   <v-btn
-    text
-    color="blue darken-2"
-    class="mr-2"
-    to="/login"
-  >
-    เข้าสู่ระบบ
-  </v-btn>
-
-  <v-btn
-    color="blue"
+    color="red lighten-1"
+    outlined
     rounded
-    depressed
-    to="/register"
+    @click="logout"
   >
-    สมัครสมาชิก
+    <v-icon left>mdi-logout</v-icon>
+    ออกจากระบบ
   </v-btn>
 </div>
+
+
     <!-- ================= HERO SECTION ================= -->
     <v-sheet
       class="hero-section d-flex align-center"
@@ -133,13 +127,29 @@ export default {
           content: 'บริการอาบน้ำ ตัดขน และสปาน้องหมา ดูแลด้วยความใส่ใจ ปลอดภัย ได้มาตรฐาน'
         }
       ]
+      
     }
   }
+  ,  mounted() {
+    const user = localStorage.getItem('user')
+    if (!user) {
+      this.$router.push('/login')
+    }
+  },
+  methods: {
+    logout() {
+      localStorage.removeItem('user')
+      this.$router.push('/login')
+    }
+  }
+
 }
+
 </script>
 
 <style scoped>
   /* ================= TOP AUTH BAR ================= */
+
 .top-auth-bar {
   position: absolute;
   top: 24px;
