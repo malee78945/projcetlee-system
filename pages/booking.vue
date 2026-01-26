@@ -134,9 +134,34 @@ export default {
 
 <style scoped>
 .v-card {
-    color: #000;
+    color: #292929;
   background: #f8fbff;
 }
 .v-text-field , .v-select {
-    color: #000;   }
+    color: #161616;   }
+    .v-card {
+  background: #f8fbff;
+}
+
+/* 1. เปลี่ยนสีขอบ (Border) ของช่อง Input ทั้งหมดให้เป็นสีดำ */
+:deep(.v-input__control .v-input__slot fieldset) {
+  border-color: rgba(0, 0, 0, 1) !important; /* สีดำสนิท */
+  border-width: 1.5px; /* เพิ่มความหนาของขอบเล็กน้อยเพื่อให้ชัดขึ้น */
+}
+
+/* 2. เปลี่ยนสีขอบเวลาเอาเมาส์ไปวาง (Hover) */
+:deep(.v-text-field--outlined:not(.v-input--is-focused):not(.v-input--has-state) > .v-input__control > .v-input__slot:hover fieldset) {
+  border-color: #000000 !important;
+}
+
+/* 3. เปลี่ยนสีขอบเวลาที่กำลังกดเลือก (Focus) */
+:deep(.v-text-field--outlined.v-input--is-focused fieldset) {
+  border-color: #000000 !important;
+  border-width: 2px;
+}
+
+/* (ของเดิมจากข้อที่แล้ว) ทำให้ตัวหนังสือข้างในเป็นสีดำด้วย */
+:deep(input), :deep(.v-select__selection), :deep(.v-label) {
+  color: black !important;
+}
 </style>

@@ -59,9 +59,9 @@
                 rounded
                 color="blue"
                 class="px-8 mb-3"
-                to="/services"
+                to="/shop"
               >
-                ดูบริการทั้งหมด
+                สั่งซื้อสิ้นค้าอื่นๆ
               </v-btn>
             </div>
           </v-col>
