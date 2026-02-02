@@ -53,7 +53,7 @@
           >
             ยืนยันการจอง
           </v-btn>
-
+            <v-btn text block class="mt-2 black--text" @click="$router.back()">ย้อนกลับ</v-btn>
         </v-card>
 
       </v-col>
@@ -106,28 +106,31 @@ export default {
 
   methods: {
     confirmBooking () {
-      if (!this.bookingDate || !this.bookingTime) {
-        alert('กรุณาเลือกวันที่และเวลา')
-        return
-      }
+  if (!this.bookingDate || !this.bookingTime) {
+    alert('กรุณาเลือกวันที่และเวลา')
+    return
+  }
 
-      // เก็บข้อมูลการจองไว้ใช้ต่อ
-      const bookingData = {
-        service_id: this.service.id,
-        service_name: this.service.name,
-        price: this.service.price,
-        date: this.bookingDate,
-        time: this.bookingTime
-      }
+  // ป้องกันกรณี service ยังไม่โหลด
+  if (!this.service) {
+    alert('ข้อมูลบริการไม่สมบูรณ์')
+    return
+  }
 
-      localStorage.setItem(
-        'booking_data',
-        JSON.stringify(bookingData)
-      )
+  const bookingData = {
+    service_id: this.service.id,
+    service_name: this.service.name,
+    price: this.service.price,
+    date: this.bookingDate,
+    time: this.bookingTime
+  }
 
-      // 👉 ไปหน้าชำระเงิน
-      this.$router.push('/payment')
-    }
+  // บันทึกลงเครื่อง
+  localStorage.setItem('booking_data', JSON.stringify(bookingData))
+
+  // ไปหน้าชำระเงิน
+  this.$router.push('/payment')
+}
   }
 }
 </script>

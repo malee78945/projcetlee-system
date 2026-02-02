@@ -1,9 +1,9 @@
 <template>
   <v-container class="py-10">
 
-    <h1 class="font-weight-bold mb-8">
-      🐶 บริการของเรา
-    </h1>
+    <h1 class="font-weight-bold mb-8 blue--text">
+  🐶 บริการของเรา
+</h1>
 
     <v-row>
       <v-col
