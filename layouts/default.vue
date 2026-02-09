@@ -19,7 +19,16 @@
     </v-footer>
   </v-app>
 </template>
-
+<script>
+export default {
+  mounted() {
+    // เช็กก่อนว่ามี token หรือยัง ถ้ายังไม่มีค่อยไปดึงมาใหม่
+    if (!this.$store.state.token) { 
+      this.$store.dispatch('initAuth')
+    }
+  }
+}
+</script>
 <style scoped>
 .v-main {
   background: #f5f7fb;

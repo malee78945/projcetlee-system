@@ -233,18 +233,35 @@ export default {
     }
   },
   methods: {
-    addToCart (product) {
-      console.log('เพิ่มสินค้า:', product)
-      // ตัวอย่างต่อ Vuex
-      // this.$store.dispatch('cart/addItem', product)
-      alert(`เพิ่ม ${product.name} ลงตะกร้าแล้ว`)
-    },
-    buyWithBooking (product) {
-      this.$router.push({
-        path: '/booking',
-        query: { product_id: product.id }
-      })
+  addToCart(product) {
+    // เตรียมข้อมูลให้ตรงกับที่ store/cart.js ต้องการ
+    // ใน store เราเช็ก products_id หรือ serviceID
+    const payload = {
+      products_id: product.id, // ใช้ id จากรายการสินค้าเป็น products_id
+      name: product.name,
+      price: product.price,
+      image: product.image
     }
+
+    // เรียก action ใน store/cart.js
+    // ต้องระบุชื่อโมดูล 'cart/' นำหน้าชื่อ action
+    this.$store.dispatch('cart/addtocart', payload)
+
+    // แจ้งเตือนผู้ใช้ (เปลี่ยนจาก alert เป็นการเปิด Drawer หรือ Snackbar จะดูดีกว่า)
+    // หรือสั่งให้เปิด Cart Drawer ทันทีที่เพิ่มของ
+    this.$store.commit('cart/TOGGLE_DRAWER', true)
+    
+    console.log('เพิ่มสินค้าลงตะกร้าสำเร็จ:', payload)
+  },
+
+  buyWithBooking(product) {
+    // ถ้าต้องการให้จองด้วย เราก็แอดลงตะกร้าก่อน แล้วค่อยส่งไปหน้าจอง
+    this.addToCart(product)
+    this.$router.push({
+      path: '/booking',
+      query: { product_id: product.id }
+    })
   }
 }
+
 </script>

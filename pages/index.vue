@@ -1,38 +1,55 @@
 <template>
-  <!-- ================= TOP AUTH BAR ================= -->
-
-
   <div>
-<div class="top-auth-bar">
-  <v-btn
-    text
-    color="blue darken-2"
-    class="mr-2"
-    to="/login"
-  >
-    เข้าสู่ระบบ
-  </v-btn>
+    <div class="top-auth-bar">
+      <template v-if="!$store.state.token">
+        <v-btn
+          text
+          color="blue darken-2"
+          class="mr-2"
+          to="/login"
+        >
+          เข้าสู่ระบบ
+        </v-btn>
 
-  <v-btn
-    color="blue"
-    rounded
-    depressed
-    to="/register"
-  >
-    สมัครสมาชิก
-  </v-btn>
-</div>
-    <!-- ================= HERO SECTION ================= -->
+        <v-btn
+          color="blue"
+          rounded
+          depressed
+          to="/register"
+        >
+          สมัครสมาชิก
+        </v-btn>
+      </template>
+
+      <template v-else>
+        <v-btn
+          text
+          color="blue darken-2"
+          class="mr-2"
+          to="/profile"
+        >
+          <v-icon left>mdi-account-circle</v-icon>
+          {{ $store.state.user ? $store.state.user.username : 'ข้อมูลส่วนตัว' }}
+        </v-btn>
+
+        <v-btn
+          color="blue"
+          rounded
+          depressed
+          to="/history"
+        >
+          ประวัติการจอง
+        </v-btn>
+      </template>
+    </div>
+
     <v-sheet
       class="hero-section d-flex align-center"
       height="85vh"
     >
       <v-container>
         <v-row align="center">
-
-          <!-- LEFT CONTENT -->
           <v-col cols="12" md="6">
-            
             <span class="hero-badge">
               🐾 บริการดูแลสัตว์เลี้ยงครบวงจร
             </span>
@@ -67,12 +84,11 @@
                 class="px-8 mb-3"
                 to="/shop"
               >
-                สั่งซื้อสิ้นค้าอื่นๆ
+                สั่งซื้อสินค้าอื่นๆ
               </v-btn>
             </div>
           </v-col>
 
-          <!-- RIGHT IMAGE -->
           <v-col cols="12" md="6" class="text-center">
             <v-img
               src="https://images.unsplash.com/photo-1601758125946-6ec2ef64daf8"
@@ -81,15 +97,12 @@
               contain
             />
           </v-col>
-
         </v-row>
       </v-container>
     </v-sheet>
 
-    <!-- ================= TRUST SECTION ================= -->
     <v-container class="py-14">
       <v-row justify="center" class="text-center">
-
         <v-col cols="12" md="3">
           <v-icon size="44" color="blue">mdi-shield-check</v-icon>
           <h3 class="mt-4 font-weight-bold">ปลอดภัย ได้มาตรฐาน</h3>
@@ -113,33 +126,31 @@
             เลือกวันและเวลาได้ทันที
           </p>
         </v-col>
-
       </v-row>
     </v-container>
-    
   </div>
 </template>
 
 <script>
 export default {
-  name: 'HomePage',
-  head () {
-    return {
-      title: 'Pet Grooming | บริการอาบน้ำน้องหมา',
-      meta: [
-        {
-          hid: 'description',
-          name: 'description',
-          content: 'บริการอาบน้ำ ตัดขน และสปาน้องหมา ดูแลด้วยความใส่ใจ ปลอดภัย ได้มาตรฐาน'
-        }
-      ]
+  methods: {
+    logout() {
+      // 1. ล้างค่าใน LocalStorage
+      localStorage.removeItem('token')
+      localStorage.removeItem('user')
+
+      // 2. เรียก Mutation ใน Store เพื่อล้างค่า (อ้างอิงจากไฟล์ store/index.js ของคุณ)
+      this.$store.commit('LOGOUT')
+
+      // 3. กลับไปหน้าหลัก
+      this.$router.push('/')
     }
   }
 }
 </script>
 
 <style scoped>
-  /* ================= TOP AUTH BAR ================= */
+/* ================= TOP AUTH BAR ================= */
 .top-auth-bar {
   position: absolute;
   top: 24px;

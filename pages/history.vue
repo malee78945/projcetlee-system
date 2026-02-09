@@ -26,15 +26,18 @@
                 <h3 class="white--text">{{ item.service_name }}</h3>
               </div>
               <p class="grey--text mb-1">
-                <v-icon x-small color="grey">mdi-calendar</v-icon> วันที่: {{ item.date }}
+                <v-icon x-small color="grey">mdi-calendar</v-icon> วันที่: {{item.booking_date }}
               </p>
               <p class="grey--text mb-0">
-                <v-icon x-small color="grey">mdi-clock-outline</v-icon> เวลา: {{ item.time }} น.
+                <v-icon x-small color="grey">mdi-clock-outline</v-icon> เวลา: {{ item.booking_time}} น.
               </p>
             </v-col>
             <v-col cols="12" sm="4" class="text-right">
-              <div class="blue--text font-weight-bold text-h6">{{ item.amount || item.price }} บาท</div>
-              <v-chip small color="green" dark class="mt-2">ชำระเงินสำเร็จ</v-chip>
+              <div class="blue--text font-weight-bold text-h6">{{ item.price  }} บาท</div>
+              <<v-chip small color="blue" dark class="mt-2">
+  {{ item.status }}
+</v-chip>
+
             </v-col>
           </v-row>
         </v-card>
@@ -68,19 +71,19 @@ export default {
   // วางส่วนนี้ลงไปครับ
   async mounted() {
     try {
-      // เรียกใช้ไฟล์ PHP ที่เราเพิ่งสร้าง
-      const response = await this.$axios.get('get_history.php');
-      
-      // ดูข้อมูลที่ส่งมาจาก PHP ในหน้า Console (กด F12 ในเบราว์เซอร์)
+      const response = await this.$axios.get(
+  'http://localhost/myfistapp_api/get_history.php'
+);
+
+
+
       console.log("Data from PHP:", response.data); 
-      
-      // ตรวจสอบว่าข้อมูลที่ได้มาเป็นรายการ (Array) หรือไม่
+    
       if (Array.isArray(response.data)) {
         this.historyList = response.data;
       }
     } catch (err) {
       console.error("ดึงข้อมูลไม่สำเร็จ:", err);
-      // ถ้าดึงไม่สำเร็จ ให้ลองดึงข้อมูลล่าสุดจากเครื่องมาโชว์แก้ขัด
       const lastBooking = localStorage.getItem('last_booking');
       if (lastBooking) {
         this.historyList = [JSON.parse(lastBooking)];
